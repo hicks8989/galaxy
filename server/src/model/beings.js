@@ -3,26 +3,8 @@ const mongoose = require("mongoose");
 // Get shcema and objectId:
 const Schema = mongoose.Schema;
 
-// generatePrimes function:
-const generatePrimes = (max) => {
-    let primes = [2];
- 
-    for(let n = 3; n < max; n += 2) {
-        let isPrime = true;
-        for (let i = 0; i < primes.length; i++) {
-            if (n % primes[i] == 0) {
-                isPrime = false;
-            }
-        }
-
-        if (isPrime) primes.push(n);
-    }
- 
-    return primes;
-}
-
-const primes = generatePrimes(1000);
-const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+// Planets for validation:
+const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto"];
 
 // Being Schema:
 const beingSchema = new Schema({
@@ -45,12 +27,7 @@ const beingSchema = new Schema({
         type: String,
         required: [true, "A planet is required to input a being into the database."],
         validate: [(planet) => {
-            // Check if the galaxy is prime:
-            if (this.galaxy in primes) {
-                return planet == "Pluto";
-            } else {
-                return planet in planets;
-            }
+            return planets.includes(planet);
         }]
     },
     description: {

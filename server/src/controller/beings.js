@@ -16,6 +16,26 @@ function prioritySort(a, b) {
     return a.priority - b.priority;
 }
 
+// generatePrimes function:
+const generatePrimes = (max) => {
+    let primes = [2];
+ 
+    for(let n = 3; n < max; n += 2) {
+        let isPrime = true;
+        for (let i = 0; i < primes.length; i++) {
+            if (n % primes[i] == 0) {
+                isPrime = false;
+            }
+        }
+
+        if (isPrime) primes.push(n);
+    }
+ 
+    return primes;
+}
+
+const primes = generatePrimes(1000);
+
 // Controllers:
 exports.getBeings = async (req, res, next) => {
     // Get all beings:
@@ -44,6 +64,12 @@ exports.getBeings = async (req, res, next) => {
 exports.createBeing = async (req, res, next) => {
     // Create a being:
     try {
+        if (primes.includes(req.body.galaxy)) {
+            if (req.body.planet != "Pluto") throw Error("Invalid planet for prime numbered galaxy");
+        } else {
+            if (req.body.planet == "Pluto") throw Error("Invalid planet for prime numbered galaxy");
+        }
+
         const being = new Being({
             ...req.body
         });
@@ -82,7 +108,7 @@ exports.createBeing = async (req, res, next) => {
 exports.deleteBeing = async (req, res, next) => {
     // Delete a being:
     try {
-        await Being.deleteOne({ _id: req.body._id });
+        await Being.deleteOne({ _id: req.params.beingId });
 
         // Decrement the galaxy and planet count:
         const galaxy = req.body.galaxy;
