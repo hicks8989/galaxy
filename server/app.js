@@ -3,17 +3,19 @@
 // ==============================================
 
 const express = require("express");
+const { json, urlencoded } = require("express");
 const cors = require("cors");
 const createError = require("http-errors");
 
 // Get the port.
-const port = 3000;
+const port = 3001;
 
 // Initialize app.
 const app = express();
 const apiRouter = require("./src/routes");
 
-// Use Cors.
+app.use(json());
+app.use(urlencoded({ extended: false }));
 app.use(cors());
 
 // Get the database.

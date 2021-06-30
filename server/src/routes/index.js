@@ -7,6 +7,6 @@ router.get("/", function(req, res, next) {
 });
 
 router.use("/auth", require("./auth"));
-router.use("/beings", passport.authenticate("jwt", { session: false }), require("./beings"));
+router.use("/beings", /*passport.authenticate("jwt", { session: false }),*/ require("./beings"));
 
 module.exports = router;
